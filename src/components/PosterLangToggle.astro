@@ -1,0 +1,49 @@
+<script is:inline>
+  try {
+    if (localStorage.getItem("posters") === "ko") document.documentElement.dataset.posters = "ko";
+  } catch {}
+</script>
+
+<div class="text-muted-foreground flex items-center gap-2 font-mono text-sm">
+  <span>posters</span>
+  <div class="border-border flex overflow-hidden rounded border" role="group" aria-label="Poster language">
+    <button
+      type="button"
+      data-poster-choice="en"
+      class="aria-pressed:bg-primary aria-pressed:text-primary-foreground hover:text-foreground px-2 py-1"
+      aria-pressed="true"
+    >
+      english
+    </button>
+    <button
+      type="button"
+      data-poster-choice="ko"
+      class="aria-pressed:bg-primary aria-pressed:text-primary-foreground hover:text-foreground border-border border-l px-2 py-1"
+      aria-pressed="false"
+    >
+      korean
+    </button>
+  </div>
+</div>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-poster-choice]");
+
+  const apply = (lang: string) => {
+    if (lang === "ko") document.documentElement.dataset.posters = "ko";
+    else delete document.documentElement.dataset.posters;
+    buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.posterChoice === lang)));
+  };
+
+  apply(document.documentElement.dataset.posters ?? "en");
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const lang = button.dataset.posterChoice ?? "en";
+      apply(lang);
+      try {
+        localStorage.setItem("posters", lang);
+      } catch {}
+    });
+  });
+</script>

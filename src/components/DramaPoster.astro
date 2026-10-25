@@ -1,0 +1,61 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import TvSketch from "@/components/sketches/TvSketch.astro";
+
+interface Props {
+  drama: CollectionEntry<"kdramas">;
+  width?: number;
+  eager?: boolean;
+}
+
+const { drama, width = 400, eager = false } = Astro.props;
+const { poster, posterEn, posterUrl, title } = drama.data;
+const alt = posterEn ? `Korean poster of ${title}` : `Poster of ${title}`;
+---
+
+<div class="border-border bg-card relative aspect-[2/3] w-full overflow-hidden rounded-md border">
+  <div class="flex h-full flex-col items-center justify-center gap-3 p-4 text-center">
+    <div class="w-16">
+      <TvSketch />
+    </div>
+    <span class="font-serif text-lg leading-tight text-balance">{title}</span>
+  </div>
+  {
+    poster ? (
+      <Image
+        src={poster}
+        alt={alt}
+        width={width}
+        loading={eager ? "eager" : "lazy"}
+        data-poster-lang={posterEn ? "ko" : undefined}
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+    ) : (
+      posterUrl && (
+        <img
+          src={posterUrl}
+          alt={alt}
+          loading={eager ? "eager" : "lazy"}
+          decoding="async"
+          referrerpolicy="no-referrer"
+          onerror="this.remove()"
+          data-poster-lang={posterEn ? "ko" : undefined}
+          class="absolute inset-0 h-full w-full object-cover"
+        />
+      )
+    )
+  }
+  {
+    posterEn && (
+      <Image
+        src={posterEn}
+        alt={`Poster of ${title}`}
+        width={width}
+        loading={eager ? "eager" : "lazy"}
+        data-poster-lang="en"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+    )
+  }
+</div>

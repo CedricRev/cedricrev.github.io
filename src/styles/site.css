@@ -3,6 +3,14 @@ body {
   color: var(--foreground);
 }
 
+[data-poster-lang="ko"],
+:root[data-posters="ko"] [data-poster-lang="en"] {
+  display: none;
+}
+:root[data-posters="ko"] [data-poster-lang="ko"] {
+  display: block;
+}
+
 .sketch {
   display: block;
   max-width: 100%;

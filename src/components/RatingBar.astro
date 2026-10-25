@@ -1,0 +1,16 @@
+---
+interface Props {
+  rating: number;
+  size?: "sm" | "md";
+}
+
+const { rating, size = "sm" } = Astro.props;
+const filled = Math.floor(rating);
+const half = rating % 1 !== 0;
+const bar = "█".repeat(filled) + (half ? "▌" : "") + "░".repeat(10 - filled - (half ? 1 : 0));
+---
+
+<span class:list={["font-mono tabular-nums", size === "md" ? "text-base" : "text-xs"]} aria-label={`${rating} out of 10`}>
+  <span class="text-ochre" aria-hidden="true">{bar}</span>
+  <span class="ml-1.5">{rating}/10</span>
+</span>

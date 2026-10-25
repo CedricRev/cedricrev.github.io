@@ -10,7 +10,8 @@ const site = process.env.SITE_URL || "https://cedricrev.github.io";
 
 export default defineConfig({
   site,
-  integrations: [sitemap()],
+  // The K-drama page is a personal page, so it is left out of the sitemap.
+  integrations: [sitemap({ filter: (page) => !page.includes("/kdramas") })],
   vite: {
     plugins: [tailwindcss()],
   },

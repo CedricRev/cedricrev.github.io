@@ -1,0 +1,106 @@
+---
+import { getCollection } from "astro:content";
+import DramaPoster from "@/components/DramaPoster.astro";
+import PosterLangToggle from "@/components/PosterLangToggle.astro";
+import RatingBar from "@/components/RatingBar.astro";
+import TvSketch from "@/components/sketches/TvSketch.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const dramas = (await getCollection("kdramas")).sort(
+  (a, b) => b.data.released.valueOf() - a.data.released.valueOf(),
+);
+const rated = dramas.filter((d) => d.data.rating !== undefined);
+const average = rated.length ? rated.reduce((sum, d) => sum + (d.data.rating ?? 0), 0) / rated.length : undefined;
+
+const sortOptions = [
+  { value: "released-desc", label: "release date (newest)" },
+  { value: "released-asc", label: "release date (oldest)" },
+  { value: "rating-desc", label: "my rating" },
+  { value: "title-asc", label: "title (A–Z)" },
+];
+---
+
+<BaseLayout title="K-dramas" description="K-dramas Cedric Revestir has watched, with ratings and thoughts.">
+  <div class="flex items-end justify-between gap-6 py-12">
+    <div class="grid gap-3">
+      <p class="text-muted-foreground font-mono text-sm"><span class="text-primary">~</span> $ ls kdramas/</p>
+      <h1 class="font-serif text-4xl font-medium">K-dramas I've watched</h1>
+      <p class="text-muted-foreground font-mono text-sm">
+        {dramas.length} watched{average !== undefined && ` · average ${average.toFixed(1)}/10`}
+      </p>
+    </div>
+    <div class="w-20 shrink-0 sm:w-28"><TvSketch /></div>
+  </div>
+
+  <div class="mb-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+    <label class="text-muted-foreground flex items-center gap-2 font-mono text-sm">
+      <span>sort by</span>
+      <select
+        id="drama-sort"
+        class="border-border bg-card text-foreground rounded border py-1 pr-8 pl-2 font-mono text-sm"
+      >
+        {sortOptions.map((option) => <option value={option.value}>{option.label}</option>)}
+      </select>
+    </label>
+    <PosterLangToggle />
+  </div>
+
+  <ul id="drama-list" class="grid grid-cols-2 gap-x-4 gap-y-8 pb-10 sm:grid-cols-3 lg:grid-cols-4">
+    {
+      dramas.map((drama) => (
+        <li
+          data-released={drama.data.released.valueOf()}
+          data-rating={drama.data.rating ?? -1}
+          data-title={drama.data.title.toLowerCase()}
+        >
+          <a href={`/kdramas/${drama.id}/`} class="group grid gap-2">
+            <div class="relative transition-transform group-hover:-translate-y-1">
+              <DramaPoster drama={drama} />
+              <div class="absolute top-2 left-2 flex gap-1">
+                {drama.data.favorite && (
+                  <span class="bg-background/90 text-plum rounded px-1.5 py-0.5 font-mono text-xs">♥ fave</span>
+                )}
+                {drama.data.airing && (
+                  <span class="bg-background/90 text-sage rounded px-1.5 py-0.5 font-mono text-xs">● airing</span>
+                )}
+              </div>
+            </div>
+            {drama.data.rating !== undefined ? (
+              <RatingBar rating={drama.data.rating} />
+            ) : (
+              <span class="text-muted-foreground font-mono text-xs">not rated yet</span>
+            )}
+            <h2 class="group-hover:text-primary font-serif text-lg leading-tight">{drama.data.title}</h2>
+            <p class="text-muted-foreground font-mono text-xs">
+              {drama.data.released.getFullYear()} · {drama.data.type}
+            </p>
+            {drama.data.verdict && <p class="text-muted-foreground text-sm">{drama.data.verdict}</p>}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="text-muted-foreground pb-14 font-mono text-xs">
+    Posters from <a class="hover:text-primary underline" href="https://mydramalist.com">MyDramaList</a> and
+    <a class="hover:text-primary underline" href="https://www.themoviedb.org">TMDB</a>.
+  </p>
+</BaseLayout>
+
+<script>
+  const select = document.getElementById("drama-sort") as HTMLSelectElement | null;
+  const list = document.getElementById("drama-list");
+
+  const compare: Record<string, (a: HTMLElement, b: HTMLElement) => number> = {
+    "released-desc": (a, b) => Number(b.dataset.released) - Number(a.dataset.released),
+    "released-asc": (a, b) => Number(a.dataset.released) - Number(b.dataset.released),
+    "rating-desc": (a, b) => Number(b.dataset.rating) - Number(a.dataset.rating),
+    "title-asc": (a, b) => (a.dataset.title ?? "").localeCompare(b.dataset.title ?? ""),
+  };
+
+  select?.addEventListener("change", () => {
+    if (!list) return;
+    const items = Array.from(list.children) as HTMLElement[];
+    items.sort(compare[select.value]).forEach((item) => list.appendChild(item));
+  });
+</script>
