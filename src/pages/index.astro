@@ -9,6 +9,7 @@ import HeroSketch from "@/components/sketches/HeroSketch.astro";
 import PathSketch from "@/components/sketches/PathSketch.astro";
 import ToolboxSketch from "@/components/sketches/ToolboxSketch.astro";
 import { Button } from "@/components/starwind/button";
+import { features } from "@/data/features";
 import { profile } from "@/data/profile";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
@@ -28,14 +29,41 @@ const featured = (await getCollection("projects", ({ data }) => data.featured)).
       </h1>
       <p class="text-muted-foreground max-w-[54ch] text-lg">{profile.intro}</p>
       <div class="flex flex-wrap gap-2.5">
-        <Button href="/projects/" variant="primary" size="sm">View projects</Button>
-        <Button href="/cv/" variant="outline" size="sm">Read my CV</Button>
+        {
+          features.projects ? (
+            <>
+              <Button href="/projects/" variant="primary" size="sm">View projects</Button>
+              <Button href="/cv/" variant="outline" size="sm">Read my CV</Button>
+            </>
+          ) : (
+            <>
+              <Button href="/cv/" variant="primary" size="sm">Read my CV</Button>
+              <Button href="/contact/" variant="outline" size="sm">Get in touch</Button>
+            </>
+          )
+        }
       </div>
     </div>
     <div class="max-w-sm md:max-w-none">
       <HeroSketch />
     </div>
   </section>
+
+  {
+    features.now && (
+      <Section label="now" tone="plum">
+        <ul class="grid max-w-[65ch] gap-2">
+          {
+            profile.now.map((item) => (
+              <li class="before:text-plum flex gap-3 before:font-mono before:content-['→']">
+                <span>{item}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </Section>
+    )
+  }
 
   <Section label="experience" tone="primary">
     <PathSketch slot="sketch" />
@@ -47,13 +75,17 @@ const featured = (await getCollection("projects", ({ data }) => data.featured)).
     <SkillsGrid />
   </Section>
 
-  <Section label="projects" tone="ochre">
-    <BulbSketch slot="sketch" />
-    <div class="grid gap-4 sm:grid-cols-2">
-      {featured.map((project) => <ProjectCard project={project} />)}
-    </div>
-    <a href="/projects/" class="text-muted-foreground hover:text-primary mt-5 inline-block font-mono text-sm">
-      all projects →
-    </a>
-  </Section>
+  {
+    features.projects && (
+      <Section label="projects" tone="ochre">
+        <BulbSketch slot="sketch" />
+        <div class="grid gap-4 sm:grid-cols-2">
+          {featured.map((project) => <ProjectCard project={project} />)}
+        </div>
+        <a href="/projects/" class="text-muted-foreground hover:text-primary mt-5 inline-block font-mono text-sm">
+          all projects →
+        </a>
+      </Section>
+    )
+  }
 </BaseLayout>

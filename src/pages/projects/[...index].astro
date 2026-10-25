@@ -2,7 +2,12 @@
 import { getCollection } from "astro:content";
 import ProjectCard from "@/components/ProjectCard.astro";
 import BulbSketch from "@/components/sketches/BulbSketch.astro";
+import { features } from "@/data/features";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export function getStaticPaths() {
+  return features.projects ? [{ params: { index: undefined } }] : [];
+}
 
 const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
 ---

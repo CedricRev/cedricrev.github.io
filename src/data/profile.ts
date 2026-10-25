@@ -12,6 +12,11 @@ export const profile = {
     { label: "hours", value: "9:00 – 17:00 PHT, flexible" },
     { label: "work", value: "Local or remote" },
   ],
+  now: [
+    "Placeholder: the AI project you're building right now.",
+    "Placeholder: what you're learning, e.g. a course or a paper.",
+    "Placeholder: a goal for the next few months.",
+  ],
   links: {
     github: "https://github.com/CedricRev",
     linkedin: "https://www.linkedin.com/in/cedricrevestir",
