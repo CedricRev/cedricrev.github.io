@@ -1,0 +1,16 @@
+---
+// Privacy-friendly page view counting with GoatCounter (no cookies, so no
+// consent banner needed). Renders nothing unless PUBLIC_GOATCOUNTER_CODE is set.
+const code = import.meta.env.PUBLIC_GOATCOUNTER_CODE;
+---
+
+{
+  code && (
+    <script
+      is:inline
+      async
+      data-goatcounter={`https://${code}.goatcounter.com/count`}
+      src="https://gc.zgo.at/count.js"
+    />
+  )
+}

@@ -1,0 +1,48 @@
+---
+// The HTML shell every page shares: <head> tags, theme setup, and analytics.
+// Pages wrap their content in <BaseLayout title="..."> ... </BaseLayout>,
+// similar to a Blazor layout component with @Body.
+import "@/styles/starwind.css";
+import Analytics from "@/components/Analytics.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Cedric Revestir",
+  description = "Cedric Revestir, full-stack and ML/AI engineer.",
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+
+    <!-- Runs before the page paints so dark mode never flashes light. -->
+    <script is:inline>
+      const stored = localStorage.getItem("theme");
+      const prefersDark = matchMedia("(prefers-color-scheme: dark)").matches;
+      if (stored === "dark" || (!stored && prefersDark)) {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+
+    <Analytics />
+  </head>
+  <body class="bg-background text-foreground min-h-screen antialiased">
+    <slot />
+  </body>
+</html>
