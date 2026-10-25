@@ -1,11 +1,14 @@
 ---
-import { toneOf } from "@/data/tech";
+import { logoOf, toneOf } from "@/data/tech";
+import { getDevicon } from "@/lib/icons";
 
 interface Props {
   name: string;
 }
 
 const { name } = Astro.props;
+const logoName = logoOf(name);
+const logo = logoName ? getDevicon(logoName) : undefined;
 
 const toneClasses = {
   primary: "text-primary bg-primary/15",
@@ -15,4 +18,7 @@ const toneClasses = {
 };
 ---
 
-<span class:list={["rounded px-2 py-0.5 font-mono text-xs", toneClasses[toneOf(name)]]}>{name}</span>
+<span class:list={["inline-flex items-center gap-1.5 rounded px-2 py-0.5 font-mono text-xs", toneClasses[toneOf(name)]]}>
+  {logo && <svg class="size-3.5 shrink-0" viewBox={logo.viewBox} aria-hidden="true" set:html={logo.body} />}
+  {name}
+</span>

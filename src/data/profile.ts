@@ -5,7 +5,7 @@ export const profile = {
   role: "AI & Full-stack Engineer",
   location: "Philippines",
   intro:
-    "Software engineer building full-stack apps with .NET and TypeScript, and AI systems with Python. Based in the Philippines and open to local and remote AI engineering roles.",
+    "Software engineer who works mainly in Java, builds with C# and .NET at work, and uses TypeScript and Python for web and AI projects. Based in the Philippines and open to local and remote AI engineering roles.",
   links: {
     github: "https://github.com/CedricRev",
     linkedin: "https://www.linkedin.com/in/cedricrevestir",
@@ -51,6 +51,7 @@ export interface SkillGroup {
 }
 
 export const skills: SkillGroup[] = [
+  { name: "languages", tone: "plum", items: ["Java", "C#", "TypeScript", "Python"] },
   { name: "backend", tone: "primary", items: ["C#", "ASP.NET Core", "EF Core", "SQL Server"] },
   { name: "frontend", tone: "sage", items: ["Blazor", "TypeScript", "Astro", "Tailwind CSS"] },
   { name: "ai / ml", tone: "ochre", items: ["Python", "PyTorch", "LLM APIs"] },
