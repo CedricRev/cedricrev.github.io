@@ -1,4 +1,6 @@
 ---
+import Availability from "@/components/Availability.astro";
+import EmailLink from "@/components/EmailLink.astro";
 import ExperienceList from "@/components/ExperienceList.astro";
 import Section from "@/components/Section.astro";
 import SkillsGrid from "@/components/SkillsGrid.astro";
@@ -15,6 +17,9 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
       <p class="text-muted-foreground font-mono text-sm"><span class="text-primary">~</span> $ cat cv.md</p>
       <h1 class="font-serif text-4xl font-medium">{profile.name}</h1>
       <p class="text-muted-foreground">{profile.role} · {profile.location}</p>
+      <p class="font-mono text-sm">
+        <EmailLink class="text-primary hover:underline"><span data-email-text>{profile.email.user} [at] {profile.email.domain}</span></EmailLink>
+      </p>
     </div>
     {
       profile.cvPdf ? (
@@ -41,6 +46,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
   <Section label="skills" tone="sage">
     <ToolboxSketch slot="sketch" />
     <SkillsGrid />
+  </Section>
+
+  <Section label="availability" tone="plum">
+    <Availability />
   </Section>
 
   <Section label="education" tone="ochre">

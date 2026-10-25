@@ -6,6 +6,12 @@ export const profile = {
   location: "Philippines",
   intro:
     "Software engineer who works mainly in Java, builds with C# and .NET at work, and uses TypeScript and Python for web and AI projects. Based in the Philippines and open to local and remote AI engineering roles.",
+  email: { user: "cedric.revestir", domain: "gmail.com" },
+  availability: [
+    { label: "timezone", value: "Philippine time (UTC+8)" },
+    { label: "hours", value: "9:00 – 17:00 PHT, flexible" },
+    { label: "work", value: "Local or remote" },
+  ],
   links: {
     github: "https://github.com/CedricRev",
     linkedin: "https://www.linkedin.com/in/cedricrevestir",

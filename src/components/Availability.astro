@@ -1,0 +1,14 @@
+---
+import { profile } from "@/data/profile";
+---
+
+<dl class="grid gap-x-6 gap-y-2 font-mono text-sm sm:grid-cols-[100px_minmax(0,1fr)]">
+  {
+    profile.availability.map((item) => (
+      <>
+        <dt class="text-muted-foreground">{item.label}</dt>
+        <dd>{item.value}</dd>
+      </>
+    ))
+  }
+</dl>

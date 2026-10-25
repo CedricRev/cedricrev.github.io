@@ -1,0 +1,22 @@
+---
+import { profile } from "@/data/profile";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+const { user, domain } = profile.email;
+---
+
+<a href="#" data-email-user={user} data-email-domain={domain} class={className}>
+  <slot>{user} [at] {domain}</slot>
+</a>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>("[data-email-user]").forEach((link) => {
+    const address = `${link.dataset.emailUser}@${link.dataset.emailDomain}`;
+    link.href = `mailto:${address}`;
+    link.querySelectorAll("[data-email-text]").forEach((el) => (el.textContent = address));
+  });
+</script>

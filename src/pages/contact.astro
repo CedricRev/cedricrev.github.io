@@ -1,11 +1,16 @@
 ---
+import Availability from "@/components/Availability.astro";
+import EmailLink from "@/components/EmailLink.astro";
 import PlaneSketch from "@/components/sketches/PlaneSketch.astro";
 import { profile } from "@/data/profile";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
+const cardClass =
+  "group border-border bg-card hover:border-primary flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 rounded-lg border px-4 py-3 before:font-mono before:content-['>']";
+
 const channels = [
-  { label: "GitHub", href: profile.links.github, note: "Code and side projects", marker: "before:text-primary" },
-  { label: "LinkedIn", href: profile.links.linkedin, note: "Work history and messages", marker: "before:text-sage" },
+  { label: "GitHub", href: profile.links.github, note: "Code and side projects", marker: "before:text-sage" },
+  { label: "LinkedIn", href: profile.links.linkedin, note: "Work history and messages", marker: "before:text-ochre" },
 ];
 ---
 
@@ -15,19 +20,22 @@ const channels = [
       <p class="text-muted-foreground font-mono text-sm"><span class="text-primary">~</span> $ ping cedric</p>
       <h1 class="font-serif text-4xl font-medium text-balance">Let's work together.</h1>
       <p class="text-muted-foreground max-w-[50ch] text-lg">
-        I'm open to AI engineering and full-stack roles, both local and remote. The quickest way to reach me is LinkedIn.
+        I'm open to AI engineering and full-stack roles, both local and remote. Email is the quickest way to reach me.
       </p>
       <ul class="grid gap-3">
+        <li>
+          <EmailLink class:list={[cardClass, "before:text-primary"]}>
+            <span class="mr-auto font-medium">Email</span>
+            <span class="text-muted-foreground text-sm" data-email-text>
+              {profile.email.user} [at] {profile.email.domain}
+            </span>
+            <span class="text-muted-foreground group-hover:text-primary font-mono text-sm">↗</span>
+          </EmailLink>
+        </li>
         {
           channels.map((c) => (
             <li>
-              <a
-                href={c.href}
-                class:list={[
-                  "group border-border bg-card hover:border-primary flex items-baseline justify-between gap-4 rounded-lg border px-4 py-3 before:font-mono before:content-['>']",
-                  c.marker,
-                ]}
-              >
+              <a href={c.href} class:list={[cardClass, c.marker]}>
                 <span class="mr-auto font-medium">{c.label}</span>
                 <span class="text-muted-foreground text-sm">{c.note}</span>
                 <span class="text-muted-foreground group-hover:text-primary font-mono text-sm">↗</span>
@@ -36,6 +44,12 @@ const channels = [
           ))
         }
       </ul>
+      <div class="border-border mt-2 grid gap-3 border-t pt-5">
+        <h2 class="text-muted-foreground font-mono text-xs font-normal tracking-wide before:text-plum before:content-['##_']">
+          availability
+        </h2>
+        <Availability />
+      </div>
     </div>
     <div class="max-w-xs"><PlaneSketch /></div>
   </div>
