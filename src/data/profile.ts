@@ -16,6 +16,7 @@ export const profile = {
 export interface Job {
   role: string;
   company: string;
+  team?: string;
   start: string;
   end: string;
   summary: string;
@@ -26,7 +27,8 @@ export const experience: Job[] = [
   {
     role: "Software Engineer",
     company: "MinebeaMitsumi (Danao Factory)",
-    start: "Sep 2025",
+    team: "Automation Engineering Center (AEC) · Advanced Research of Machineries (ARM)",
+    start: "Sep 2026",
     end: "Present",
     summary:
       "Build and maintain internal factory software: web apps with ASP.NET and Blazor, desktop tools in WinForms, and IoT integrations on the production floor.",
@@ -35,8 +37,8 @@ export const experience: Job[] = [
   {
     role: "Freelance Developer",
     company: "Fiverr",
-    start: "",
-    end: "",
+    start: "Dec 2025",
+    end: "Sep 2026",
     summary: "Built custom Minecraft server plugins in Java for clients.",
     tech: ["Java"],
   },
