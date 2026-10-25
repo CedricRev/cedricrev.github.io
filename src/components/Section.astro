@@ -1,0 +1,37 @@
+---
+import type { Tone } from "@/data/tech";
+
+interface Props {
+  label: string;
+  tone?: Tone;
+  id?: string;
+}
+
+const { label, tone = "primary", id } = Astro.props;
+
+const markerClasses = {
+  primary: "before:text-primary",
+  sage: "before:text-sage",
+  ochre: "before:text-ochre",
+  plum: "before:text-plum",
+};
+---
+
+<section id={id} class="border-border grid gap-6 border-t py-10 md:grid-cols-[200px_minmax(0,1fr)]">
+  <div class="grid content-start gap-4">
+    <h2
+      class:list={[
+        "text-muted-foreground font-mono text-xs font-normal tracking-wide before:content-['##_']",
+        markerClasses[tone],
+      ]}
+    >
+      {label}
+    </h2>
+    <div class="w-20 md:w-28">
+      <slot name="sketch" />
+    </div>
+  </div>
+  <div class="min-w-0">
+    <slot />
+  </div>
+</section>

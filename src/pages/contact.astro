@@ -1,0 +1,42 @@
+---
+import PlaneSketch from "@/components/sketches/PlaneSketch.astro";
+import { profile } from "@/data/profile";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const channels = [
+  { label: "GitHub", href: profile.links.github, note: "Code and side projects", marker: "before:text-primary" },
+  { label: "LinkedIn", href: profile.links.linkedin, note: "Work history and messages", marker: "before:text-sage" },
+];
+---
+
+<BaseLayout title="Contact" description="How to reach Cedric Revestir.">
+  <div class="grid items-center gap-10 py-12 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] md:py-16">
+    <div class="grid gap-5">
+      <p class="text-muted-foreground font-mono text-sm"><span class="text-primary">~</span> $ ping cedric</p>
+      <h1 class="font-serif text-4xl font-medium text-balance">Let's work together.</h1>
+      <p class="text-muted-foreground max-w-[50ch] text-lg">
+        I'm open to AI engineering and full-stack roles, both local and remote. The quickest way to reach me is LinkedIn.
+      </p>
+      <ul class="grid gap-3">
+        {
+          channels.map((c) => (
+            <li>
+              <a
+                href={c.href}
+                class:list={[
+                  "group border-border bg-card hover:border-primary flex items-baseline justify-between gap-4 rounded-lg border px-4 py-3 before:font-mono before:content-['>']",
+                  c.marker,
+                ]}
+              >
+                <span class="mr-auto font-medium">{c.label}</span>
+                <span class="text-muted-foreground text-sm">{c.note}</span>
+                <span class="text-muted-foreground group-hover:text-primary font-mono text-sm">↗</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="max-w-xs"><PlaneSketch /></div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,18 @@
+---
+import { toneOf } from "@/data/tech";
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+
+const toneClasses = {
+  primary: "text-primary bg-primary/15",
+  sage: "text-sage bg-sage/15",
+  ochre: "text-ochre bg-ochre/15",
+  plum: "text-plum bg-plum/15",
+};
+---
+
+<span class:list={["rounded px-2 py-0.5 font-mono text-xs", toneClasses[toneOf(name)]]}>{name}</span>

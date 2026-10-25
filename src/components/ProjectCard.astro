@@ -1,0 +1,37 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Tag from "@/components/Tag.astro";
+import { toneOf } from "@/data/tech";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { title, summary, tech, repo, demo } = project.data;
+
+const edgeClasses = {
+  primary: "border-t-primary [&_.path]:text-primary",
+  sage: "border-t-sage [&_.path]:text-sage",
+  ochre: "border-t-ochre [&_.path]:text-ochre",
+  plum: "border-t-plum [&_.path]:text-plum",
+};
+const tone = toneOf(tech[0] ?? "");
+---
+
+<article class:list={["bg-card border-border grid content-start gap-2 rounded-lg border border-t-3 p-4", edgeClasses[tone]]}>
+  <span class="path font-mono text-xs">./{project.id}</span>
+  <h3 class="font-serif text-xl font-medium">{title}</h3>
+  <p class="text-muted-foreground text-sm">{summary}</p>
+  <div class="flex flex-wrap gap-1.5">
+    {tech.map((t) => <Tag name={t} />)}
+  </div>
+  {
+    (repo || demo) && (
+      <div class="mt-1 flex gap-4 font-mono text-xs">
+        {repo && <a class="hover:text-primary underline-offset-4 hover:underline" href={repo}>source ↗</a>}
+        {demo && <a class="hover:text-primary underline-offset-4 hover:underline" href={demo}>live demo ↗</a>}
+      </div>
+    )
+  }
+</article>

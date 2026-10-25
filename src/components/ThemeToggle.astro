@@ -1,0 +1,19 @@
+<button
+  type="button"
+  data-theme-toggle
+  class="border-border text-muted-foreground hover:text-foreground rounded border px-2 py-0.5 font-mono text-xs"
+  aria-label="Toggle dark mode"
+>
+  ◐ theme
+</button>
+
+<script>
+  document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const isDark = document.documentElement.classList.toggle("dark");
+      try {
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+      } catch {}
+    });
+  });
+</script>

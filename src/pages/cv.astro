@@ -1,0 +1,58 @@
+---
+import ExperienceList from "@/components/ExperienceList.astro";
+import Section from "@/components/Section.astro";
+import SkillsGrid from "@/components/SkillsGrid.astro";
+import PathSketch from "@/components/sketches/PathSketch.astro";
+import ToolboxSketch from "@/components/sketches/ToolboxSketch.astro";
+import { Button } from "@/components/starwind/button";
+import { education, profile } from "@/data/profile";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="CV" description="Curriculum vitae of Cedric Revestir.">
+  <div class="flex flex-wrap items-end justify-between gap-6 py-12">
+    <div class="grid gap-3">
+      <p class="text-muted-foreground font-mono text-sm"><span class="text-primary">~</span> $ cat cv.md</p>
+      <h1 class="font-serif text-4xl font-medium">{profile.name}</h1>
+      <p class="text-muted-foreground">{profile.role} · {profile.location}</p>
+    </div>
+    {
+      profile.cvPdf ? (
+        <Button href={profile.cvPdf} variant="primary" size="sm" download>
+          Download PDF
+        </Button>
+      ) : (
+        <Button variant="outline" size="sm" disabled>
+          PDF coming soon
+        </Button>
+      )
+    }
+  </div>
+
+  <Section label="summary" tone="primary">
+    <p class="max-w-[65ch]">{profile.intro}</p>
+  </Section>
+
+  <Section label="experience" tone="primary">
+    <PathSketch slot="sketch" />
+    <ExperienceList />
+  </Section>
+
+  <Section label="skills" tone="sage">
+    <ToolboxSketch slot="sketch" />
+    <SkillsGrid />
+  </Section>
+
+  <Section label="education" tone="ochre">
+    <ul class="grid gap-3">
+      {
+        education.map((item) => (
+          <li>
+            <h3 class="font-semibold">{item.degree}</h3>
+            <p class="text-muted-foreground text-sm">{item.school}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,21 @@
+---
+import { getCollection } from "astro:content";
+import ProjectCard from "@/components/ProjectCard.astro";
+import BulbSketch from "@/components/sketches/BulbSketch.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Projects" description="Projects by Cedric Revestir.">
+  <div class="flex items-end justify-between gap-6 py-12">
+    <div class="grid gap-3">
+      <p class="text-muted-foreground font-mono text-sm"><span class="text-primary">~</span> $ ls projects/</p>
+      <h1 class="font-serif text-4xl font-medium">Things I've built</h1>
+    </div>
+    <div class="w-20 shrink-0 sm:w-28"><BulbSketch /></div>
+  </div>
+  <div class="grid gap-4 pb-14 sm:grid-cols-2 lg:grid-cols-3">
+    {projects.map((project) => <ProjectCard project={project} />)}
+  </div>
+</BaseLayout>

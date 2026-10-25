@@ -1,0 +1,16 @@
+---
+import { profile } from "@/data/profile";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-border border-t">
+  <div class="text-muted-foreground mx-auto flex max-w-5xl flex-wrap justify-between gap-3 px-5 py-6 font-mono text-xs sm:px-8">
+    <span>© {year} {profile.name}</span>
+    <span class="flex gap-2">
+      <a class="hover:text-primary" href={profile.links.github}>github</a>
+      <span aria-hidden="true">·</span>
+      <a class="hover:text-primary" href={profile.links.linkedin}>linkedin</a>
+    </span>
+  </div>
+</footer>

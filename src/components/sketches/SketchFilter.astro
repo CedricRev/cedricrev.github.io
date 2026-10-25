@@ -1,0 +1,14 @@
+<svg width="0" height="0" class="absolute" aria-hidden="true">
+  <filter id="boil">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="1" result="noise">
+      <animate attributeName="seed" values="1;5;9" dur="0.75s" calcMode="discrete" repeatCount="indefinite" />
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" />
+  </filter>
+</svg>
+
+<script>
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll("#boil animate").forEach((el) => el.remove());
+  }
+</script>

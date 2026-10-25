@@ -1,0 +1,55 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import { getPublishedPosts } from "@/lib/blog";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  if (posts.length === 0) return [];
+  return [
+    { params: { slug: undefined }, props: { posts, post: undefined } },
+    ...posts.map((post) => ({ params: { slug: post.id }, props: { posts, post } })),
+  ];
+}
+
+interface Props {
+  posts: CollectionEntry<"blog">[];
+  post?: CollectionEntry<"blog">;
+}
+
+const { posts, post } = Astro.props;
+const rendered = post ? await render(post) : undefined;
+const formatDate = (d: Date) => d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+---
+
+{
+  post && rendered ? (
+    <BaseLayout title={post.data.title} description={post.data.description}>
+      <article class="mx-auto max-w-[65ch] py-12">
+        <p class="text-muted-foreground font-mono text-xs">{formatDate(post.data.date)}</p>
+        <h1 class="mt-2 mb-8 font-serif text-4xl font-medium text-balance">{post.data.title}</h1>
+        <div class="grid gap-4 leading-relaxed [&_a]:text-primary [&_a]:underline [&_h2]:mt-6 [&_h2]:font-serif [&_h2]:text-2xl">
+          <rendered.Content />
+        </div>
+      </article>
+    </BaseLayout>
+  ) : (
+    <BaseLayout title="Blog" description="Writing by Cedric Revestir.">
+      <div class="grid gap-3 py-12">
+        <p class="text-muted-foreground font-mono text-sm"><span class="text-primary">~</span> $ ls blog/</p>
+        <h1 class="font-serif text-4xl font-medium">Writing</h1>
+      </div>
+      <ul class="grid gap-5 pb-14">
+        {posts.map((p) => (
+          <li>
+            <a href={`/blog/${p.id}/`} class="group grid gap-1">
+              <span class="text-muted-foreground font-mono text-xs">{formatDate(p.data.date)}</span>
+              <span class="group-hover:text-primary font-serif text-xl">{p.data.title}</span>
+              <span class="text-muted-foreground text-sm">{p.data.description}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </BaseLayout>
+  )
+}

@@ -1,9 +1,16 @@
 ---
-// The HTML shell every page shares: <head> tags, theme setup, and analytics.
-// Pages wrap their content in <BaseLayout title="..."> ... </BaseLayout>,
-// similar to a Blazor layout component with @Body.
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource-variable/source-serif-4/opsz.css";
+import "@fontsource-variable/source-serif-4/opsz-italic.css";
+import "@fontsource-variable/jetbrains-mono";
 import "@/styles/starwind.css";
+import "@/styles/site.css";
 import Analytics from "@/components/Analytics.astro";
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import SketchFilter from "@/components/sketches/SketchFilter.astro";
 
 interface Props {
   title?: string;
@@ -11,11 +18,14 @@ interface Props {
 }
 
 const {
-  title = "Cedric Revestir",
-  description = "Cedric Revestir, full-stack and ML/AI engineer.",
+  title,
+  description = "Cedric Revestir, AI and full-stack engineer based in the Philippines.",
 } = Astro.props;
 
+const fullTitle = title ? `${title} · Cedric Revestir` : "Cedric Revestir";
+
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og.png", Astro.site);
 ---
 
 <!doctype html>
@@ -23,17 +33,26 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta property="og:title" content={title} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Runs before the page paints so dark mode never flashes light. -->
     <script is:inline>
-      const stored = localStorage.getItem("theme");
+      let stored = null;
+      try {
+        stored = localStorage.getItem("theme");
+      } catch {}
       const prefersDark = matchMedia("(prefers-color-scheme: dark)").matches;
       if (stored === "dark" || (!stored && prefersDark)) {
         document.documentElement.classList.add("dark");
@@ -42,7 +61,12 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 
     <Analytics />
   </head>
-  <body class="bg-background text-foreground min-h-screen antialiased">
-    <slot />
+  <body class="flex min-h-screen flex-col font-sans antialiased">
+    <SketchFilter />
+    <Header />
+    <main class="mx-auto w-full max-w-5xl flex-1 px-5 sm:px-8">
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>
